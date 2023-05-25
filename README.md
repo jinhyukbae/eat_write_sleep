@@ -31,6 +31,28 @@
 데이터셋을 잘라서 훈련 시키는 시도
 huggingface 에서 pretrained 된 모델 사용 시도 
 
+### 문법 교정 모델의 동어 반복의 오류
+* 짦은,의미 없는 문장을 입력하면 동어 반복되는 오류 
+ * im happy -> im happy im happy 
+ * adqwfqwfqwe -> adqwfqwfqweadqwfqwfqwe
+* 디코딩 파라미터 튜닝(Greedy Search, Beam Search, Sampling, Top-k Sampling ...) 등을 시도하였으나 자연어 처리 모델 특유의 동어 반복의 문제는 해소 돼지 않았음
+ * https://arxiv.org/abs/2002.02492 동어 반복 문제에 대한 논문    
+
+### 디코더 파라미터 튜닝 전략
+* Greedy Search
+ * 타임스텝 t에서 가장 높은 확률을 가지는 토큰을 다음 토큰으로 선택하는 전략
+* Beam Search
+ * 각 타임스텝에서 가장 가능성 있는 num_beams개의 시퀀스를 유지하고, 최종적으로 가장 확률이 높은 가설을 선택하는 방법
+* Sampling
+ * 모델이 생각하는 다음에 올 토큰에 대한 확률분포에 따라 단어를 샘플링하는 방식으로 디코딩하는 전략
+* Top-k Sampling
+ * 가장 확률이 높은 K개의 '다음 단어들'을 필터링하고, 확률 질량을 해당 K개의 '다음 단어들'에 대해 재분배하는 전략
+* Top-p (nucleus) sampling
+ * 가능도 있는 k개의 단어로부터 샘플링하는 대신, 누적 확률이 확률 p에 다다르는 최소한의 단어 집합으로부터 샘플링
+
+reference : https://huggingface.co/blog/how-to-generate?fbclid=IwAR19kbEiW_sF19TeSr4BE4jQZSIqz0GzOFD2013fIGEH32DReW9pAFq6vDM
+
+
 
 ### 서비스 배포
 * 부족한 자금 사정으로 free tier 인스턴스를 사용하다 보니 용량 부족 사태 발생 
